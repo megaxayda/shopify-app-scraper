@@ -1,0 +1,22 @@
+{
+  "name": "shopify-app-scraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/jest/bin/jest.js --watchAll"
+  },
+  "author": "Tai Pham",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "got": "^11.5.2",
+    "objects-to-csv": "^1.3.6"
+  },
+  "devDependencies": {
+    "eslint": "^7.6.0",
+    "eslint-config-google": "^0.14.0",
+    "jest": "^26.4.0",
+    "nodemon": "^2.0.4"
+  }
+}

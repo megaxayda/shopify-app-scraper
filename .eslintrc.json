@@ -10,5 +10,12 @@
     "parserOptions": {
         "ecmaVersion": 11
     },
-    "rules": {}
+    "rules": {
+        "max-len": [
+            "error",
+            {
+                "code": 140
+            }
+        ]
+    }
 }

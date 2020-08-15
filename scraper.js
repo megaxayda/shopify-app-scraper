@@ -1,29 +1,38 @@
 const got = require('got');
 const cheerio = require('cheerio');
-const fs = require('fs');
 const ObjectsToCsv = require('objects-to-csv');
+const parser = require('./parser');
+const cliProgress = require('cli-progress');
+
+/**
+ * Sleep for a period of time
+ * @param {int} miliseconds
+ */
+async function sleep(miliseconds) {
+  return new Promise( (resolve) => setTimeout(resolve, miliseconds));
+}
 
 (async () => {
   try {
-    const response = await got('https://apps.shopify.com/browse/all?page=1');
-    console.timeLog('Main');
-    const $ = cheerio.load(response.body);
+    const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+    bar.start(195, 0);
 
-    // const array = [];
-    $('#SearchResultsListings > div > div').each((index, e) => {
-      // #SearchResultsListings > div:nth-child(1) > div > a > h4
-      console.log( $(e).find('a > h4').text());
-    });
+    for (let i = 1; i < 196; i++) {
+      bar.increment();
 
-    const csv = new ObjectsToCsv([app]);
+      const response = await got(`https://apps.shopify.com/browse/all?page=${i}`);
+      const $ = cheerio.load(response.body);
+      const data = parser($.html());
+      const csv = new ObjectsToCsv(data);
+      await csv.toDisk('data.csv', {
+        append: true,
+      });
 
-    await csv.toDisk('data.csv', {
-      append: true,
-    });
-
-    // console.log($.html());
+      await sleep(1000);
+    }
+    process.exit();
   } catch (error) {
-    console.log(error.response.body);
+    console.log(error);
   }
 })();
 
